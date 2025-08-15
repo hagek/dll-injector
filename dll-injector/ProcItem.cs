@@ -1,4 +1,4 @@
-namespace dll_injector
+namespace DllInjector
 {
     internal class ProcItem
     {
@@ -10,7 +10,7 @@ namespace dll_injector
 
         public override string ToString()
         {
-            return $"{this.Name} (PID: {this.ProcessId})";
+            return $"{Name} (PID: {ProcessId})";
         }
     }
 }

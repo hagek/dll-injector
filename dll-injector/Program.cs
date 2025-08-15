@@ -1,4 +1,4 @@
-namespace dll_injector
+namespace DllInjector
 {
     internal static class Program
     {

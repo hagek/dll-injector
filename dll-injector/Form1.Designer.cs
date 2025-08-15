@@ -1,4 +1,4 @@
-﻿namespace dll_injector
+﻿namespace DllInjector
 {
     partial class Form1
     {

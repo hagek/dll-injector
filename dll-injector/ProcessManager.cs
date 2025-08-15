@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Management;
 
-namespace dll_injector
+namespace DllInjector
 {
     internal class ProcessManager
     {
@@ -9,7 +9,7 @@ namespace dll_injector
 
         public void LoadProcesses()
         {
-            this.processes.Clear();
+            processes.Clear();
 
             var searcher = new ManagementObjectSearcher("SELECT ProcessId, CommandLine FROM Win32_Process");
             var cmdLines = new Dictionary<int, string>();
@@ -44,7 +44,7 @@ namespace dll_injector
 
                 cmdLines.TryGetValue(process.Id, out string? commandLine);
 
-                this.processes.Add(new ProcItem
+                processes.Add(new ProcItem
                 {
                     Icon = icon,
                     Name = process.ProcessName,
@@ -57,7 +57,7 @@ namespace dll_injector
 
         public IReadOnlyCollection<ProcItem> GetProcItems()
         {
-            return this.processes.AsReadOnly();
+            return processes.AsReadOnly();
         }
 
     }
