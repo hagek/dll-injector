@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             rootPanel = new TableLayoutPanel();
             leftPanel = new TableLayoutPanel();
             processListView = new ListView();
@@ -39,16 +40,17 @@
             refreshButton = new Button();
             filterTextBox = new TextBox();
             rightPanel = new TableLayoutPanel();
-            injectMethodListBox = new ListBox();
-            injectButton = new Button();
-            rightRowPanel = new TableLayoutPanel();
             referButton = new Button();
-            dllPathTextBox = new TextBox();
+            dllListBox = new ListBox();
+            injectButton = new Button();
+            dllContextMenu = new ContextMenuStrip(components);
+            deleteDllMenuItem = new ToolStripMenuItem();
+            設定ToolStripMenuItem = new ToolStripMenuItem();
             rootPanel.SuspendLayout();
             leftPanel.SuspendLayout();
             topLeftPanel.SuspendLayout();
             rightPanel.SuspendLayout();
-            rightRowPanel.SuspendLayout();
+            dllContextMenu.SuspendLayout();
             SuspendLayout();
             // 
             // rootPanel
@@ -158,30 +160,43 @@
             // 
             rightPanel.ColumnCount = 1;
             rightPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            rightPanel.Controls.Add(injectMethodListBox, 0, 0);
+            rightPanel.Controls.Add(referButton, 0, 1);
+            rightPanel.Controls.Add(dllListBox, 0, 0);
             rightPanel.Controls.Add(injectButton, 0, 3);
-            rightPanel.Controls.Add(rightRowPanel, 0, 2);
             rightPanel.Dock = DockStyle.Fill;
             rightPanel.Location = new Point(611, 0);
             rightPanel.Margin = new Padding(0);
             rightPanel.Name = "rightPanel";
             rightPanel.RowCount = 4;
-            rightPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 52.2471924F));
-            rightPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 47.7528076F));
+            rightPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 91.62011F));
+            rightPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 8.379889F));
             rightPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
             rightPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 62F));
             rightPanel.Size = new Size(189, 450);
             rightPanel.TabIndex = 1;
             // 
-            // injectMethodListBox
+            // referButton
             // 
-            injectMethodListBox.Dock = DockStyle.Fill;
-            injectMethodListBox.FormattingEnabled = true;
-            injectMethodListBox.ItemHeight = 15;
-            injectMethodListBox.Location = new Point(3, 3);
-            injectMethodListBox.Name = "injectMethodListBox";
-            injectMethodListBox.Size = new Size(183, 181);
-            injectMethodListBox.TabIndex = 0;
+            referButton.Dock = DockStyle.Top;
+            referButton.Location = new Point(3, 331);
+            referButton.Name = "referButton";
+            referButton.Size = new Size(183, 22);
+            referButton.TabIndex = 0;
+            referButton.Text = "参照";
+            referButton.UseVisualStyleBackColor = true;
+            referButton.Click += OnReferButtonClick;
+            // 
+            // dllListBox
+            // 
+            dllListBox.Dock = DockStyle.Fill;
+            dllListBox.FormattingEnabled = true;
+            dllListBox.ItemHeight = 15;
+            dllListBox.Location = new Point(3, 3);
+            dllListBox.Name = "dllListBox";
+            dllListBox.SelectionMode = SelectionMode.MultiExtended;
+            dllListBox.Size = new Size(183, 322);
+            dllListBox.TabIndex = 0;
+            dllListBox.MouseDown += OnDllListBoxMouseDown;
             // 
             // injectButton
             // 
@@ -193,39 +208,24 @@
             injectButton.Text = "Inject";
             injectButton.UseVisualStyleBackColor = true;
             // 
-            // rightRowPanel
+            // dllContextMenu
             // 
-            rightRowPanel.ColumnCount = 2;
-            rightRowPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 71.95767F));
-            rightRowPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 28.0423279F));
-            rightRowPanel.Controls.Add(referButton, 1, 0);
-            rightRowPanel.Controls.Add(dllPathTextBox, 0, 0);
-            rightRowPanel.Dock = DockStyle.Fill;
-            rightRowPanel.Location = new Point(0, 358);
-            rightRowPanel.Margin = new Padding(0);
-            rightRowPanel.Name = "rightRowPanel";
-            rightRowPanel.RowCount = 1;
-            rightRowPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            rightRowPanel.Size = new Size(189, 29);
-            rightRowPanel.TabIndex = 2;
+            dllContextMenu.Items.AddRange(new ToolStripItem[] { deleteDllMenuItem, 設定ToolStripMenuItem });
+            dllContextMenu.Name = "contextMenuStrip1";
+            dllContextMenu.Size = new Size(99, 48);
             // 
-            // referButton
+            // deleteDllMenuItem
             // 
-            referButton.Dock = DockStyle.Fill;
-            referButton.Location = new Point(139, 3);
-            referButton.Name = "referButton";
-            referButton.Size = new Size(47, 23);
-            referButton.TabIndex = 0;
-            referButton.Text = "参照";
-            referButton.UseVisualStyleBackColor = true;
+            deleteDllMenuItem.Name = "deleteDllMenuItem";
+            deleteDllMenuItem.Size = new Size(98, 22);
+            deleteDllMenuItem.Text = "削除";
+            deleteDllMenuItem.Click += OnDeleteDllMenuItemClick;
             // 
-            // dllPathTextBox
+            // 設定ToolStripMenuItem
             // 
-            dllPathTextBox.Dock = DockStyle.Fill;
-            dllPathTextBox.Location = new Point(3, 3);
-            dllPathTextBox.Name = "dllPathTextBox";
-            dllPathTextBox.Size = new Size(130, 23);
-            dllPathTextBox.TabIndex = 1;
+            設定ToolStripMenuItem.Name = "設定ToolStripMenuItem";
+            設定ToolStripMenuItem.Size = new Size(98, 22);
+            設定ToolStripMenuItem.Text = "設定";
             // 
             // Form1
             // 
@@ -240,8 +240,7 @@
             topLeftPanel.ResumeLayout(false);
             topLeftPanel.PerformLayout();
             rightPanel.ResumeLayout(false);
-            rightRowPanel.ResumeLayout(false);
-            rightRowPanel.PerformLayout();
+            dllContextMenu.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -258,10 +257,11 @@
         private Button refreshButton;
         private TextBox filterTextBox;
         private TableLayoutPanel rightPanel;
-        private ListBox injectMethodListBox;
+        private ListBox dllListBox;
         private Button injectButton;
-        private TableLayoutPanel rightRowPanel;
         private Button referButton;
-        private TextBox dllPathTextBox;
+        private ContextMenuStrip dllContextMenu;
+        private ToolStripMenuItem deleteDllMenuItem;
+        private ToolStripMenuItem 設定ToolStripMenuItem;
     }
 }
