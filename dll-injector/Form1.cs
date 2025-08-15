@@ -4,6 +4,7 @@ namespace dll_injector
     {
 
         private readonly ProcessManager processManager = new();
+        private readonly DllListManager dllListManager = new();
 
         public Form1()
         {
@@ -16,11 +17,63 @@ namespace dll_injector
         {
             this.UpdateProcessList(p => p.Name.Contains(this.filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
         }
-        
+
         private void OnRefreshButtonClick(object sender, EventArgs e)
         {
             this.LoadProcesses();
             this.UpdateProcessList(p => p.Name.Contains(this.filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private void OnReferButtonClick(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new()
+            {
+                Filter = "DLL Files (*.dll)|*.dll|All Files (*.*)|*.*",
+                Multiselect = true
+            };
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                foreach (var file in fileDialog.FileNames)
+                {
+                    this.dllListManager.AddDll(file);
+                }
+                this.UpdateDllList();
+            }
+        }
+
+        private void OnDllListBoxMouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var item = this.dllListBox.IndexFromPoint(e.Location);
+                if (item != ListBox.NoMatches)
+                {
+                    if (!this.dllListBox.SelectedIndices.Contains(item))
+                    {
+                        this.dllListBox.ClearSelected();
+                        this.dllListBox.SelectedIndex = item;
+                    }
+                    this.dllContextMenu.Show(this.dllListBox, e.Location);
+                }
+            }
+        }
+
+        private void OnDeleteDllMenuItemClick(object sender, EventArgs e)
+        {
+            foreach (var selectedItem in this.dllListBox.SelectedItems.Cast<string>().ToList())
+            {
+                this.dllListManager.RemoveDll(selectedItem);
+            }
+            this.UpdateDllList();
+        }
+
+        private void UpdateDllList()
+        {
+            this.dllListBox.Items.Clear();
+            foreach (var dll in this.dllListManager.GetDlls())
+            {
+                this.dllListBox.Items.Add(dll);
+            }
         }
 
         private void LoadProcesses()
@@ -55,6 +108,5 @@ namespace dll_injector
                 ++index;
             }
         }
-
     }
 }
