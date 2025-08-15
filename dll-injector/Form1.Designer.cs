@@ -1,4 +1,4 @@
-﻿namespace dll_injector
+﻿namespace DllInjector
 {
     partial class Form1
     {
@@ -145,7 +145,7 @@
             refreshButton.TabIndex = 0;
             refreshButton.Text = "更新";
             refreshButton.UseVisualStyleBackColor = true;
-            refreshButton.Click += OnRefreshButtonClick;
+            refreshButton.Click += RefreshButton_Click;
             // 
             // filterTextBox
             // 
@@ -184,7 +184,7 @@
             referButton.TabIndex = 0;
             referButton.Text = "参照";
             referButton.UseVisualStyleBackColor = true;
-            referButton.Click += OnReferButtonClick;
+            referButton.Click += ReferButton_Click;
             // 
             // dllListBox
             // 
@@ -196,7 +196,7 @@
             dllListBox.SelectionMode = SelectionMode.MultiExtended;
             dllListBox.Size = new Size(183, 322);
             dllListBox.TabIndex = 0;
-            dllListBox.MouseDown += OnDllListBoxMouseDown;
+            dllListBox.MouseDown += DllListBox_MouseDown;
             // 
             // injectButton
             // 
@@ -219,7 +219,7 @@
             deleteDllMenuItem.Name = "deleteDllMenuItem";
             deleteDllMenuItem.Size = new Size(98, 22);
             deleteDllMenuItem.Text = "削除";
-            deleteDllMenuItem.Click += OnDeleteDllMenuItemClick;
+            deleteDllMenuItem.Click += DeleteDllMenuItem_Click;
             // 
             // 設定ToolStripMenuItem
             // 

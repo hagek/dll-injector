@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dll_injector
+namespace DllInjector
 {
     internal class DllListManager
     {

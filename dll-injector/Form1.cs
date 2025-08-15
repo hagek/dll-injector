@@ -1,4 +1,4 @@
-namespace dll_injector
+namespace DllInjector
 {
     public partial class Form1 : Form
     {
@@ -8,23 +8,23 @@ namespace dll_injector
 
         public Form1()
         {
-            this.InitializeComponent();
-            this.LoadProcesses();
-            this.UpdateProcessList();
+            InitializeComponent();
+            LoadProcesses();
+            UpdateProcessList();
         }
 
         private void OnFilterTextChange(object sender, EventArgs e)
         {
-            this.UpdateProcessList(p => p.Name.Contains(this.filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
+            UpdateProcessList(p => p.Name.Contains(filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
         }
 
-        private void OnRefreshButtonClick(object sender, EventArgs e)
+        private void RefreshButton_Click(object sender, EventArgs e)
         {
-            this.LoadProcesses();
-            this.UpdateProcessList(p => p.Name.Contains(this.filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
+            LoadProcesses();
+            UpdateProcessList(p => p.Name.Contains(filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
         }
 
-        private void OnReferButtonClick(object sender, EventArgs e)
+        private void ReferButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new()
             {
@@ -35,59 +35,59 @@ namespace dll_injector
             {
                 foreach (var file in fileDialog.FileNames)
                 {
-                    this.dllListManager.AddDll(file);
+                    dllListManager.AddDll(file);
                 }
-                this.UpdateDllList();
+                UpdateDllList();
             }
         }
 
-        private void OnDllListBoxMouseDown(object sender, MouseEventArgs e)
+        private void DllListBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                var item = this.dllListBox.IndexFromPoint(e.Location);
+                var item = dllListBox.IndexFromPoint(e.Location);
                 if (item != ListBox.NoMatches)
                 {
-                    if (!this.dllListBox.SelectedIndices.Contains(item))
+                    if (!dllListBox.SelectedIndices.Contains(item))
                     {
-                        this.dllListBox.ClearSelected();
-                        this.dllListBox.SelectedIndex = item;
+                        dllListBox.ClearSelected();
+                        dllListBox.SelectedIndex = item;
                     }
-                    this.dllContextMenu.Show(this.dllListBox, e.Location);
+                    dllContextMenu.Show(dllListBox, e.Location);
                 }
             }
         }
 
-        private void OnDeleteDllMenuItemClick(object sender, EventArgs e)
+        private void DeleteDllMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (var selectedItem in this.dllListBox.SelectedItems.Cast<string>().ToList())
+            foreach (var selectedItem in dllListBox.SelectedItems.Cast<string>().ToList())
             {
-                this.dllListManager.RemoveDll(selectedItem);
+                dllListManager.RemoveDll(selectedItem);
             }
-            this.UpdateDllList();
+            UpdateDllList();
         }
 
         private void UpdateDllList()
         {
-            this.dllListBox.Items.Clear();
-            foreach (var dll in this.dllListManager.GetDlls())
+            dllListBox.Items.Clear();
+            foreach (var dll in dllListManager.GetDlls())
             {
-                this.dllListBox.Items.Add(dll);
+                dllListBox.Items.Add(dll);
             }
         }
 
         private void LoadProcesses()
         {
-            this.refreshButton.Enabled = false;
-            this.processManager.LoadProcesses();
-            this.refreshButton.Enabled = true;
+            refreshButton.Enabled = false;
+            processManager.LoadProcesses();
+            refreshButton.Enabled = true;
         }
 
         private void UpdateProcessList(Predicate<ProcItem>? filter = null)
         {
-            this.processListView.Items.Clear();
-            this.processListView.SmallImageList = new();
-            var list = this.processManager.GetProcItems();
+            processListView.Items.Clear();
+            processListView.SmallImageList = new();
+            var list = processManager.GetProcItems();
             var index = 0;
             foreach (var p in list)
             {
@@ -102,9 +102,9 @@ namespace dll_injector
                 item.SubItems.Add(p.ProcessId.ToString());
                 item.SubItems.Add(p.ExecutablePath);
                 item.SubItems.Add(p.CommandLine);
-                this.processListView.Items.Add(item);
+                processListView.Items.Add(item);
                 var icon = p.Icon ?? Properties.Resources.TrollSageIcon;
-                this.processListView.SmallImageList.Images.Add(icon);
+                processListView.SmallImageList.Images.Add(icon);
                 ++index;
             }
         }

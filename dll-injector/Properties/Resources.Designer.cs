@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace dll_injector.Properties {
+namespace DllInjector.Properties {
     using System;
     
     
