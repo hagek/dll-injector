@@ -143,6 +143,7 @@
             refreshButton.TabIndex = 0;
             refreshButton.Text = "更新";
             refreshButton.UseVisualStyleBackColor = true;
+            refreshButton.Click += OnRefreshButtonClick;
             // 
             // filterTextBox
             // 
