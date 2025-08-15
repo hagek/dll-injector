@@ -1,61 +1,64 @@
 ﻿using System.Diagnostics;
 using System.Management;
 
-public class ProcessManager
+namespace dll_injector
 {
-    private readonly List<ProcItem> processes = new List<ProcItem>();
-
-    public void LoadProcesses()
+    internal class ProcessManager
     {
-        this.processes.Clear();
-        
-        var searcher = new ManagementObjectSearcher("SELECT ProcessId, CommandLine FROM Win32_Process");
-        var cmdLines = new Dictionary<int, string>();
+        private readonly List<ProcItem> processes = new List<ProcItem>();
 
-        foreach (var obj in searcher.Get())
+        public void LoadProcesses()
         {
-            try
+            this.processes.Clear();
+
+            var searcher = new ManagementObjectSearcher("SELECT ProcessId, CommandLine FROM Win32_Process");
+            var cmdLines = new Dictionary<int, string>();
+
+            foreach (var obj in searcher.Get())
             {
-                int processId = Convert.ToInt32(obj["ProcessId"]);
-                string? cmdLine = obj["CommandLine"]?.ToString();
-                if (!string.IsNullOrEmpty(cmdLine))
+                try
                 {
-                    cmdLines[processId] = cmdLine;
+                    int processId = Convert.ToInt32(obj["ProcessId"]);
+                    string? cmdLine = obj["CommandLine"]?.ToString();
+                    if (!string.IsNullOrEmpty(cmdLine))
+                    {
+                        cmdLines[processId] = cmdLine;
+                    }
                 }
+                catch (Exception) { }
             }
-            catch (Exception) { }
+
+            foreach (var process in Process.GetProcesses())
+            {
+                string? exePath = null;
+                Bitmap? icon = null;
+                try
+                {
+                    exePath = process.MainModule?.FileName;
+                    if (!string.IsNullOrEmpty(exePath))
+                    {
+                        icon = Icon.ExtractAssociatedIcon(exePath)?.ToBitmap();
+                    }
+                }
+                catch (Exception) { }
+
+                cmdLines.TryGetValue(process.Id, out string? commandLine);
+
+                this.processes.Add(new ProcItem
+                {
+                    Icon = icon,
+                    Name = process.ProcessName,
+                    ProcessId = process.Id,
+                    ExecutablePath = exePath ?? string.Empty,
+                    CommandLine = commandLine ?? string.Empty
+                });
+            }
         }
 
-        foreach (var process in Process.GetProcesses())
+        public IReadOnlyCollection<ProcItem> GetProcItems()
         {
-            string? exePath = null;
-            Bitmap? icon = null;
-            try
-            {
-                exePath = process.MainModule?.FileName;
-                if (!string.IsNullOrEmpty(exePath))
-                {
-                    icon = Icon.ExtractAssociatedIcon(exePath)?.ToBitmap();
-                }
-            }
-            catch (Exception) { }
-
-            cmdLines.TryGetValue(process.Id, out string? commandLine);
-
-            this.processes.Add(new ProcItem
-            {
-                Icon = icon,
-                Name = process.ProcessName,
-                ProcessId = process.Id,
-                ExecutablePath = exePath ?? string.Empty,
-                CommandLine = commandLine ?? string.Empty
-            });
+            return this.processes.AsReadOnly();
         }
-    }
 
-    public IReadOnlyCollection<ProcItem> GetProcItems()
-    {
-        return this.processes.AsReadOnly();
     }
-
 }

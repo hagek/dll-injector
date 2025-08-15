@@ -1,13 +1,16 @@
-public class ProcItem
+namespace dll_injector
 {
-    public string Name { get; init; }
-    public int ProcessId { get; init; }
-    public string ExecutablePath { get; init; }
-    public string CommandLine { get; init; }
-    public Bitmap? Icon { get; init; }
-
-    public override string ToString()
+    internal class ProcItem
     {
-        return $"{this.Name} (PID: {this.ProcessId})";
+        public string Name { get; init; }
+        public int ProcessId { get; init; }
+        public string ExecutablePath { get; init; }
+        public string CommandLine { get; init; }
+        public Bitmap? Icon { get; init; }
+
+        public override string ToString()
+        {
+            return $"{this.Name} (PID: {this.ProcessId})";
+        }
     }
 }

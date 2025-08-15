@@ -18,13 +18,13 @@ namespace dll_injector
             this.UpdateProcessList(p => p.Name.Contains(this.filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
         }
 
-        private void OnRefreshButtonClick(object sender, EventArgs e)
+        private void RefreshButton_Click(object sender, EventArgs e)
         {
             this.LoadProcesses();
             this.UpdateProcessList(p => p.Name.Contains(this.filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
         }
 
-        private void OnReferButtonClick(object sender, EventArgs e)
+        private void ReferButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new()
             {
@@ -41,7 +41,7 @@ namespace dll_injector
             }
         }
 
-        private void OnDllListBoxMouseDown(object sender, MouseEventArgs e)
+        private void DllListBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -58,7 +58,7 @@ namespace dll_injector
             }
         }
 
-        private void OnDeleteDllMenuItemClick(object sender, EventArgs e)
+        private void DeleteDllMenuItem_Click(object sender, EventArgs e)
         {
             foreach (var selectedItem in this.dllListBox.SelectedItems.Cast<string>().ToList())
             {
