@@ -16,6 +16,12 @@ namespace dll_injector
         {
             this.UpdateProcessList(p => p.Name.Contains(this.filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
         }
+        
+        private void OnRefreshButtonClick(object sender, EventArgs e)
+        {
+            this.LoadProcesses();
+            this.UpdateProcessList(p => p.Name.Contains(this.filterTextBox.Text, StringComparison.OrdinalIgnoreCase));
+        }
 
         private void LoadProcesses()
         {
